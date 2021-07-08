@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.44.1
+          toolchain: stable
           override: true
 
       # cargo fmt does not build the code, and running it in a fresh clone of
@@ -48,12 +48,12 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.44.1
+          toolchain: stable
           override: true
 
       - name: Fetch path to Zcash parameters
         working-directory: ./zcash_proofs
-        run: echo "::set-env name=ZCASH_PARAMS::$(cargo run --release --example get-params-path --features directories)"
+        run: echo "ZCASH_PARAMS=$(cargo run --release --example get-params-path --features directories)" >> $GITHUB_ENV
       - name: Cache Zcash parameters
         id: cache-params
         uses: actions/cache@v2
@@ -98,7 +98,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.44.1
+          toolchain: stable
           override: true
       - name: Add target
         run: rustup target add ${{ matrix.target }}
@@ -129,7 +129,7 @@ jobs:
 
       - name: Fetch path to Zcash parameters
         working-directory: ./zcash_proofs
-        run: echo "::set-env name=ZCASH_PARAMS::$(cargo run --release --example get-params-path --features directories)"
+        run: echo "ZCASH_PARAMS=$(cargo run --release --example get-params-path --features directories)" >> $GITHUB_ENV
       - name: Cache Zcash parameters
         id: cache-params
         uses: actions/cache@v2
@@ -173,3 +173,16 @@ jobs:
         with:
           command: doc
           args: --all --document-private-items
+
+  security:
+    name: Security - Cargo Audit
+    runs-on: ubuntu-latest
+    container:
+      image: rustlang/rust:nightly
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install cargo-audit
+      run: cargo install cargo-audit
+    - name: Cargo Audit
+      run: cargo audit
+

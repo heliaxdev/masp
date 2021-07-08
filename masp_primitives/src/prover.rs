@@ -23,7 +23,7 @@ pub trait TxProver {
     /// [`SpendDescription`], while accumulating its value commitment randomness inside
     /// the context for later use.
     ///
-    /// [`SpendDescription`]: crate::transaction::components::SpendDescription
+    /// [`SpendDescription`]: zcash_primitives::transaction::components::SpendDescription
     fn spend_proof(
         &self,
         ctx: &mut Self::SaplingProvingContext,
@@ -41,7 +41,7 @@ pub trait TxProver {
     /// while accumulating its value commitment randomness inside the context for later
     /// use.
     ///
-    /// [`OutputDescription`]: crate::transaction::components::OutputDescription
+    /// [`OutputDescription`]: zcash_primitives::transaction::components::OutputDescription
     fn output_proof(
         &self,
         ctx: &mut Self::SaplingProvingContext,
@@ -71,7 +71,7 @@ pub(crate) mod mock {
     use crate::{
         asset_type::AssetType,
         constants::SPENDING_KEY_GENERATOR,
-        primitives::{Diversifier, PaymentAddress, ProofGenerationKey, Rseed, ValueCommitment},
+        primitives::{Diversifier, PaymentAddress, ProofGenerationKey, Rseed},
     };
 
     use crate::{
